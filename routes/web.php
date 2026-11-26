@@ -3,10 +3,10 @@
 use App\Http\Controllers\IdeaController;
 use App\Http\Controllers\RegisteredUserController;
 use App\Http\Controllers\SessionsController;
+use App\Http\Controllers\StepController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [IdeaController::class, 'index'])
-    ->name('home');
+Route::get('/', [IdeaController::class, 'index'])->name('home');
 
 Route::middleware('guest')->group(function () {
     Route::get('/register', [RegisteredUserController::class, 'create'])
@@ -34,6 +34,9 @@ Route::middleware('auth')->group(function () {
 
     Route::delete('/ideas/{idea}', [IdeaController::class, 'destroy'])
         ->name('ideas.destroy');
+
+    Route::patch('/steps/{step}', [StepController::class, 'update'])
+        ->name('steps.update');
 
     Route::post('/logout', [SessionsController::class, 'destroy'])
         ->name('logout');

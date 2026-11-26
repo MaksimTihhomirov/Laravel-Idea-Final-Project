@@ -22,8 +22,7 @@
                     @csrf
                     @method('DELETE')
 
-                    <button type="submit"
-                            class="btn btn-secondary text-red-400">
+                    <button class="btn btn-secondary text-red-400">
                         Delete
                     </button>
 
@@ -33,9 +32,7 @@
 
         </div>
 
-        <h1 class="text-4xl font-bold">
-            {{ $idea->title }}
-        </h1>
+        <h1 class="text-4xl font-bold">{{ $idea->title }}</h1>
 
         <div class="flex items-center gap-3 mt-4">
 
@@ -51,11 +48,47 @@
             <p class="whitespace-pre-wrap">{{ $idea->description }}</p>
         </x-card>
 
-        @if(count($idea->links ?? []))
+        @if($idea->steps->isNotEmpty())
 
             <h2 class="text-xl font-bold mt-8 mb-4">
-                Links
+                Actionable Steps
             </h2>
+
+            <div class="space-y-3">
+
+                @foreach($idea->steps as $step)
+
+                    <x-card>
+
+                        <form method="POST"
+                              action="{{ route('steps.update', $step) }}"
+                              class="flex items-center gap-3">
+
+                            @csrf
+                            @method('PATCH')
+
+                            <input type="checkbox"
+                                   aria-label="Mark step as completed"
+                                   @checked($step->completed)
+                                   onchange="this.form.submit()">
+
+                            <span class="{{ $step->completed ? 'line-through text-muted-foreground' : '' }}">
+                                {{ $step->description }}
+                            </span>
+
+                        </form>
+
+                    </x-card>
+
+                @endforeach
+
+            </div>
+
+        @endif
+
+        @if(count($idea->links ?? []))
+
+            <h2 class="text-xl font-bold mt-8 mb-4">Links</h2>
 
             <div class="space-y-3">
 

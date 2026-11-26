@@ -41,15 +41,60 @@
     </fieldset>
 
     <x-form.field name="description" label="Description">
-
-        <textarea
-            id="description"
-            name="description"
-            class="textarea"
-            placeholder="Describe your idea..."
-        >{{ old('description') }}</textarea>
-
+        <textarea id="description"
+                  name="description"
+                  class="textarea"
+                  placeholder="Describe your idea...">{{ old('description') }}</textarea>
     </x-form.field>
+
+    <fieldset
+        x-data="{ steps: @js(old('steps', [])), newStep: '' }"
+        class="space-y-3"
+    >
+
+        <legend class="text-sm font-medium">
+            Actionable Steps
+        </legend>
+
+        <template x-for="(step, index) in steps" :key="index">
+
+            <div class="flex gap-2">
+
+                <input type="text" name="steps[]"
+                       x-model="steps[index]" class="input" required>
+
+                <button type="button"
+                        @click="steps.splice(index, 1)"
+                        class="btn btn-secondary">
+                    ×
+                </button>
+
+            </div>
+
+        </template>
+
+        <div class="flex gap-2">
+
+            <input type="text"
+                   id="new-step"
+                   x-model="newStep"
+                   class="input"
+                   placeholder="Add a step...">
+
+            <button type="button"
+                    @click="steps.push(newStep.trim()); newStep = ''"
+                    :disabled="!newStep.trim()"
+                    class="btn btn-secondary">
+                +
+            </button>
+
+        </div>
+
+        @error('steps.*')
+            <p class="text-red-400">{{ $message }}</p>
+        @enderror
+
+    </fieldset>
 
     <fieldset
         x-data="{ links: @js(old('links', [])), newLink: '' }"
@@ -60,12 +105,10 @@
 
         <template x-for="(link, index) in links" :key="index">
 
-            <div class="flex items-center gap-2">
+            <div class="flex gap-2">
 
-                <input type="url"
-                       name="links[]"
-                       x-model="links[index]"
-                       class="input" required>
+                <input type="url" name="links[]"
+                       x-model="links[index]" class="input" required>
 
                 <button type="button"
                         @click="links.splice(index, 1)"
@@ -77,31 +120,22 @@
 
         </template>
 
-        <div class="flex items-center gap-2">
+        <div class="flex gap-2">
 
-            <input
-                type="url"
-                id="new-link"
-                x-model="newLink"
-                placeholder="https://example.com"
-                class="input"
-            >
+            <input type="url" id="new-link"
+                   x-model="newLink"
+                   placeholder="https://example.com"
+                   class="input">
 
-            <button
-                type="button"
-                @click="links.push(newLink.trim()); newLink = ''"
-                :disabled="!newLink.trim()"
-                class="btn btn-secondary"
-                aria-label="Add a new link"
-            >
+            <button type="button"
+                    @click="links.push(newLink.trim()); newLink = ''"
+                    :disabled="!newLink.trim()"
+                    class="btn btn-secondary"
+                    aria-label="Add a new link">
                 +
             </button>
 
         </div>
-
-        @error('links')
-            <p class="text-red-400">{{ $message }}</p>
-        @enderror
 
         @error('links.*')
             <p class="text-red-400">{{ $message }}</p>

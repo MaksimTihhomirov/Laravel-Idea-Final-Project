@@ -21,6 +21,8 @@ class StoreIdeaRequest extends FormRequest
             'status' => ['required', Rule::enum(IdeaStatus::class)],
             'links' => ['sometimes', 'array', 'max:20'],
             'links.*' => ['required', 'string', 'url:http,https', 'max:2048'],
+            'steps' => ['sometimes', 'array', 'max:50'],
+            'steps.*' => ['required', 'string', 'max:255'],
         ];
     }
 }

@@ -6,7 +6,9 @@ use App\IdeaStatus;
 use App\Http\Requests\StoreIdeaRequest;
 use App\Models\Idea;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class IdeaController extends Controller
@@ -39,7 +41,20 @@ class IdeaController extends Controller
 
     public function store(StoreIdeaRequest $request)
     {
-        Auth::user()->ideas()->create($request->validated());
+        $attributes = $request->validated();
+
+        $steps = Arr::pull($attributes, 'steps', []);
+
+        DB::transaction(function () use ($attributes, $steps) {
+            $idea = Auth::user()->ideas()->create($attributes);
+
+            foreach ($steps as $description) {
+                $idea->steps()->create([
+                    'description' => $description,
+                    'completed' => false,
+                ]);
+            }
+        });
 
         return redirect('/ideas')
             ->with('success', 'Idea created successfully!');
