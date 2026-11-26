@@ -32,7 +32,14 @@
 
         </div>
 
+        @if($idea->image_path)
+    <img src="{{ asset('storage/' . $idea->image_path) }}"
+         alt="{{ $idea->title }}"
+         class="w-full max-h-96 object-cover rounded-xl mb-6">
+@endif
+
         <h1 class="text-4xl font-bold">{{ $idea->title }}</h1>
+        
 
         <div class="flex items-center gap-3 mt-4">
 

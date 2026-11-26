@@ -1,5 +1,5 @@
-<form method="POST" action="{{ route('ideas.store') }}" class="space-y-6">
-
+<form method="POST" action="{{ route('ideas.store') }}"
+      enctype="multipart/form-data" class="space-y-6">
     @csrf
 
     <x-form.field name="title" label="Title">
@@ -46,6 +46,16 @@
                   class="textarea"
                   placeholder="Describe your idea...">{{ old('description') }}</textarea>
     </x-form.field>
+
+    <x-form.field name="image" label="Featured Image">
+
+    <input type="file"
+           id="image"
+           name="image"
+           accept="image/jpeg,image/png,image/webp"
+           class="input">
+
+</x-form.field>
 
     <fieldset
         x-data="{ steps: @js(old('steps', [])), newStep: '' }"

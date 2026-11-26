@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class IdeaController extends Controller
@@ -44,17 +45,30 @@ class IdeaController extends Controller
         $attributes = $request->validated();
 
         $steps = Arr::pull($attributes, 'steps', []);
+        $image = Arr::pull($attributes, 'image');
 
-        DB::transaction(function () use ($attributes, $steps) {
-            $idea = Auth::user()->ideas()->create($attributes);
+        $imagePath = $image?->store('ideas', 'public');
 
-            foreach ($steps as $description) {
-                $idea->steps()->create([
-                    'description' => $description,
-                    'completed' => false,
-                ]);
+        $attributes['image_path'] = $imagePath;
+
+        try {
+            DB::transaction(function () use ($attributes, $steps) {
+                $idea = Auth::user()->ideas()->create($attributes);
+
+                foreach ($steps as $description) {
+                    $idea->steps()->create([
+                        'description' => $description,
+                        'completed' => false,
+                    ]);
+                }
+            });
+        } catch (\Throwable $exception) {
+            if ($imagePath) {
+                Storage::disk('public')->delete($imagePath);
             }
-        });
+
+            throw $exception;
+        }
 
         return redirect('/ideas')
             ->with('success', 'Idea created successfully!');
@@ -73,7 +87,13 @@ class IdeaController extends Controller
     {
         abort_unless(Auth::user()->is($idea->user), 403);
 
+        $imagePath = $idea->image_path;
+
         $idea->delete();
+
+        if ($imagePath) {
+            Storage::disk('public')->delete($imagePath);
+        }
 
         return redirect('/ideas')
             ->with('success', 'Idea deleted successfully!');

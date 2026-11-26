@@ -23,6 +23,7 @@ class StoreIdeaRequest extends FormRequest
             'links.*' => ['required', 'string', 'url:http,https', 'max:2048'],
             'steps' => ['sometimes', 'array', 'max:50'],
             'steps.*' => ['required', 'string', 'max:255'],
+            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
         ];
     }
 }
