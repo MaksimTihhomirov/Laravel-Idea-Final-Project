@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\IdeaController;
 use App\Http\Controllers\RegisteredUserController;
 use App\Http\Controllers\SessionsController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', fn () => view('welcome'))->name('home');
+Route::get('/', [IdeaController::class, 'index'])
+    ->name('home');
 
 Route::middleware('guest')->group(function () {
     Route::get('/register', [RegisteredUserController::class, 'create'])
@@ -20,6 +22,10 @@ Route::middleware('guest')->group(function () {
         ->middleware('throttle:5,1');
 });
 
-Route::post('/logout', [SessionsController::class, 'destroy'])
-    ->middleware('auth')
-    ->name('logout');
+Route::middleware('auth')->group(function () {
+    Route::get('/ideas', [IdeaController::class, 'index'])
+        ->name('ideas.index');
+
+    Route::post('/logout', [SessionsController::class, 'destroy'])
+        ->name('logout');
+});
