@@ -5,6 +5,7 @@ use App\Http\Controllers\RegisteredUserController;
 use App\Http\Controllers\SessionsController;
 use App\Http\Controllers\StepController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileController;
 
 Route::get('/', [IdeaController::class, 'index'])->name('home');
 
@@ -26,6 +27,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/ideas', [IdeaController::class, 'index'])
         ->name('ideas.index');
 
+        Route::get('/profile/edit', [ProfileController::class, 'edit'])
+    ->name('profile.edit');
+
+Route::patch('/profile/edit', [ProfileController::class, 'update'])
+    ->name('profile.update')
+    ->middleware('throttle:5,1');
 
     Route::post('/ideas', [IdeaController::class, 'store'])
         ->name('ideas.store');
