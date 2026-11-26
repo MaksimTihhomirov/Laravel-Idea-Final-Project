@@ -1,0 +1,13 @@
+.input {
+    @apply w-full rounded-md border border-border bg-card px-3 py-2 text-foreground;
+}
+
+.textarea {
+    @apply w-full rounded-md border border-border bg-card px-3 py-2 text-foreground;
+    min-height: 160px;
+}
+
+.input:focus,
+.textarea:focus {
+    @apply outline-2 outline-primary;
+}
