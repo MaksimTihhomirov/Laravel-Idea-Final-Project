@@ -1,16 +1,25 @@
-<form method="POST" action="{{ route('ideas.store') }}"
-      enctype="multipart/form-data" class="space-y-6">
+@props(['idea' => null])
+
+<form method="POST"
+      action="{{ $idea ? '#' : route('ideas.store') }}"
+      @if($idea) x-data @submit.prevent @endif
+      enctype="multipart/form-data"
+      class="space-y-6">
+
     @csrf
 
     <x-form.field name="title" label="Title">
+
         <input type="text" id="title" name="title"
                class="input"
                placeholder="Enter an idea for your title"
-               value="{{ old('title') }}" required>
+               value="{{ old('title', $idea?->title) }}"
+               required>
+
     </x-form.field>
 
     <fieldset class="space-y-3"
-              x-data="{ status: @js(old('status', 'pending')) }">
+              x-data="{ status: @js(old('status', $idea?->status->value ?? 'pending')) }">
 
         <legend class="text-sm font-medium">Status</legend>
 
@@ -41,24 +50,34 @@
     </fieldset>
 
     <x-form.field name="description" label="Description">
+
         <textarea id="description"
                   name="description"
                   class="textarea"
-                  placeholder="Describe your idea...">{{ old('description') }}</textarea>
+                  placeholder="Describe your idea...">{{ old('description', $idea?->description) }}</textarea>
+
     </x-form.field>
 
     <x-form.field name="image" label="Featured Image">
 
-    <input type="file"
-           id="image"
-           name="image"
-           accept="image/jpeg,image/png,image/webp"
-           class="input">
+        @if($idea?->image_path)
 
-</x-form.field>
+            <img src="{{ asset('storage/' . $idea->image_path) }}"
+                 alt="{{ $idea->title }}"
+                 class="w-full h-48 object-cover rounded-lg">
+
+        @endif
+
+        <input type="file"
+               id="image"
+               name="image"
+               accept="image/jpeg,image/png,image/webp"
+               class="input">
+
+    </x-form.field>
 
     <fieldset
-        x-data="{ steps: @js(old('steps', [])), newStep: '' }"
+        x-data="{ steps: @js(old('steps', $idea?->steps->pluck('description')->all() ?? [])), newStep: '' }"
         class="space-y-3"
     >
 
@@ -107,7 +126,7 @@
     </fieldset>
 
     <fieldset
-        x-data="{ links: @js(old('links', [])), newLink: '' }"
+        x-data="{ links: @js(old('links', $idea?->links ?? [])), newLink: '' }"
         class="space-y-3"
     >
 
@@ -161,8 +180,8 @@
             Cancel
         </button>
 
-        <button type="submit" class="btn btn-primary">
-            Create Idea
+        <button type="submit" class="btn btn-primary" @disabled($idea)>
+            {{ $idea ? 'Save Changes' : 'Create Idea' }}
         </button>
 
     </div>

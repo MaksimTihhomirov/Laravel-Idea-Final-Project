@@ -11,9 +11,15 @@
 
             <div class="flex gap-3">
 
-                <button type="button" class="btn btn-secondary" disabled>
-                    Edit Idea
-                </button>
+ <button
+    x-data
+    type="button"
+    data-test="edit-idea-button"
+    @click="$dispatch('open-modal', 'edit-idea')"
+    class="btn btn-secondary"
+>
+    Edit Idea
+</button>
 
                 <form method="POST"
                       action="{{ route('ideas.destroy', $idea) }}"
@@ -110,5 +116,7 @@
         @endif
 
     </div>
-
+<x-modal name="edit-idea" title="Edit Idea">
+    <x-idea-form :idea="$idea" />
+</x-modal>
 </x-layout.layout>
