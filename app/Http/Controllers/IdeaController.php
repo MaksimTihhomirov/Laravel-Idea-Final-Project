@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\CreateIdea;
 use App\IdeaStatus;
 use App\Http\Requests\StoreIdeaRequest;
 use App\Models\Idea;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
@@ -40,35 +39,9 @@ class IdeaController extends Controller
         ]);
     }
 
-    public function store(StoreIdeaRequest $request)
+    public function store(StoreIdeaRequest $request, CreateIdea $action)
     {
-        $attributes = $request->validated();
-
-        $steps = Arr::pull($attributes, 'steps', []);
-        $image = Arr::pull($attributes, 'image');
-
-        $imagePath = $image?->store('ideas', 'public');
-
-        $attributes['image_path'] = $imagePath;
-
-        try {
-            DB::transaction(function () use ($attributes, $steps) {
-                $idea = Auth::user()->ideas()->create($attributes);
-
-                foreach ($steps as $description) {
-                    $idea->steps()->create([
-                        'description' => $description,
-                        'completed' => false,
-                    ]);
-                }
-            });
-        } catch (\Throwable $exception) {
-            if ($imagePath) {
-                Storage::disk('public')->delete($imagePath);
-            }
-
-            throw $exception;
-        }
+        $action->handle($request->validated(), $request->user());
 
         return redirect('/ideas')
             ->with('success', 'Idea created successfully!');
