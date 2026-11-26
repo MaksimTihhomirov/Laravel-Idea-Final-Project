@@ -16,6 +16,11 @@ use Illuminate\Notifications\Notifiable;
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
+
+    public function ideas()
+{
+    return $this->hasMany(Idea::class);
+}
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
