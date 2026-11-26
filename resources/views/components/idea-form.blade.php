@@ -3,17 +3,10 @@
     @csrf
 
     <x-form.field name="title" label="Title">
-
-        <input
-            type="text"
-            id="title"
-            name="title"
-            class="input"
-            placeholder="Enter an idea for your title"
-            value="{{ old('title') }}"
-            required
-        >
-
+        <input type="text" id="title" name="title"
+               class="input"
+               placeholder="Enter an idea for your title"
+               value="{{ old('title') }}" required>
     </x-form.field>
 
     <fieldset class="space-y-3"
@@ -27,15 +20,16 @@
 
             @foreach(\App\IdeaStatus::cases() as $item)
 
-            <button
-    type="button"
-    data-test="button-status-{{ $item->value }}"
-    @click="status = @js($item->value)"
-    :class="status === @js($item->value) ? 'btn-primary' : 'btn-secondary'"
-    class="btn"
->
-    {{ $item->label() }}
-</button>
+                <button
+                    type="button"
+                    data-test="button-status-{{ $item->value }}"
+                    @click="status = @js($item->value)"
+                    :class="status === @js($item->value) ? 'btn-primary' : 'btn-secondary'"
+                    class="btn"
+                >
+                    {{ $item->label() }}
+                </button>
+
             @endforeach
 
         </div>
@@ -57,8 +51,76 @@
 
     </x-form.field>
 
-    <button type="submit" class="btn btn-primary w-full">
-        Create Idea
-    </button>
+    <fieldset
+        x-data="{ links: @js(old('links', [])), newLink: '' }"
+        class="space-y-3"
+    >
+
+        <legend class="text-sm font-medium">Links</legend>
+
+        <template x-for="(link, index) in links" :key="index">
+
+            <div class="flex items-center gap-2">
+
+                <input type="url"
+                       name="links[]"
+                       x-model="links[index]"
+                       class="input" required>
+
+                <button type="button"
+                        @click="links.splice(index, 1)"
+                        class="btn btn-secondary">
+                    ×
+                </button>
+
+            </div>
+
+        </template>
+
+        <div class="flex items-center gap-2">
+
+            <input
+                type="url"
+                id="new-link"
+                x-model="newLink"
+                placeholder="https://example.com"
+                class="input"
+            >
+
+            <button
+                type="button"
+                @click="links.push(newLink.trim()); newLink = ''"
+                :disabled="!newLink.trim()"
+                class="btn btn-secondary"
+                aria-label="Add a new link"
+            >
+                +
+            </button>
+
+        </div>
+
+        @error('links')
+            <p class="text-red-400">{{ $message }}</p>
+        @enderror
+
+        @error('links.*')
+            <p class="text-red-400">{{ $message }}</p>
+        @enderror
+
+    </fieldset>
+
+    <div class="flex justify-end gap-3">
+
+        <button type="button"
+                @click="show = false"
+                class="btn btn-secondary">
+            Cancel
+        </button>
+
+        <button type="submit" class="btn btn-primary">
+            Create Idea
+        </button>
+
+    </div>
 
 </form>
