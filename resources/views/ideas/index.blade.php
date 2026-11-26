@@ -7,15 +7,15 @@
         <p class="text-muted-foreground mt-2">
             Capture your thoughts. Make a plan.
         </p>
-
-        <button
-            x-data
-            @click="$dispatch('open-modal', 'create-idea')"
-            type="button"
-            class="w-full mt-8 h-32 bg-card border border-border rounded-xl text-left px-6 hover:border-primary cursor-pointer"
-        >
-            What's the idea?
-        </button>
+<button
+    x-data
+    data-test="create-idea-button"
+    @click="$dispatch('open-modal', 'create-idea')"
+    type="button"
+    class="w-full mt-8 h-32 bg-card border border-border rounded-xl text-left px-6 hover:border-primary cursor-pointer"
+>
+    What's the idea?
+</button>
 
     </header>
 

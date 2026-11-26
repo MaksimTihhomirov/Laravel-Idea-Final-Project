@@ -27,15 +27,15 @@
 
             @foreach(\App\IdeaStatus::cases() as $item)
 
-                <button
-                    type="button"
-                    @click="status = @js($item->value)"
-                    :class="status === @js($item->value) ? 'btn-primary' : 'btn-secondary'"
-                    class="btn"
-                >
-                    {{ $item->label() }}
-                </button>
-
+            <button
+    type="button"
+    data-test="button-status-{{ $item->value }}"
+    @click="status = @js($item->value)"
+    :class="status === @js($item->value) ? 'btn-primary' : 'btn-secondary'"
+    class="btn"
+>
+    {{ $item->label() }}
+</button>
             @endforeach
 
         </div>
