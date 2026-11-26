@@ -116,7 +116,8 @@
         @endif
 
     </div>
-<x-modal name="edit-idea" title="Edit Idea">
+<x-modal name="edit-idea" title="Edit Idea" :show="$errors->any()">
     <x-idea-form :idea="$idea" />
 </x-modal>
+
 </x-layout.layout>

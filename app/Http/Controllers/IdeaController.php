@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Actions\CreateIdea;
+use App\Actions\UpdateIdea;
 use App\IdeaStatus;
 use App\Http\Requests\StoreIdeaRequest;
+use App\Http\Requests\UpdateIdeaRequest;
 use App\Models\Idea;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -54,6 +56,17 @@ class IdeaController extends Controller
         return view('ideas.show', [
             'idea' => $idea,
         ]);
+    }
+
+    public function update(
+        UpdateIdeaRequest $request,
+        Idea $idea,
+        UpdateIdea $action
+    ) {
+        $action->handle($request->validated(), $idea);
+
+        return redirect()->route('ideas.show', $idea)
+            ->with('success', 'Idea updated successfully!');
     }
 
     public function destroy(Idea $idea)

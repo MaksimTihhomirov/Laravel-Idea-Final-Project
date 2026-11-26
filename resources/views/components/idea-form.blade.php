@@ -1,12 +1,17 @@
 @props(['idea' => null])
 
+@props(['idea' => null])
+
 <form method="POST"
-      action="{{ $idea ? '#' : route('ideas.store') }}"
-      @if($idea) x-data @submit.prevent @endif
+      action="{{ $idea ? route('ideas.update', $idea) : route('ideas.store') }}"
       enctype="multipart/form-data"
       class="space-y-6">
 
     @csrf
+
+    @if($idea)
+        @method('PATCH')
+    @endif
 
     <x-form.field name="title" label="Title">
 
@@ -65,6 +70,12 @@
             <img src="{{ asset('storage/' . $idea->image_path) }}"
                  alt="{{ $idea->title }}"
                  class="w-full h-48 object-cover rounded-lg">
+
+                 <label class="flex items-center gap-2 mt-3">
+    <input type="checkbox" name="remove_image" value="1">
+    Remove Image
+
+</label>
 
         @endif
 
@@ -180,10 +191,9 @@
             Cancel
         </button>
 
-        <button type="submit" class="btn btn-primary" @disabled($idea)>
-            {{ $idea ? 'Save Changes' : 'Create Idea' }}
-        </button>
-
+     <button type="submit" class="btn btn-primary">
+    {{ $idea ? 'Save Changes' : 'Create Idea' }}
+</button>
     </div>
 
 </form>
