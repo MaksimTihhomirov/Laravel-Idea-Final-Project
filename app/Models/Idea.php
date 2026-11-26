@@ -36,4 +36,22 @@ class Idea extends Model
     {
         return $this->hasMany(Step::class);
     }
+
+    public static function statusCounts(User $user): array
+    {
+        $counts = $user->ideas()
+            ->selectRaw('status, count(*) as count')
+            ->groupBy('status')
+            ->pluck('count', 'status');
+
+        $result = [];
+
+        foreach (IdeaStatus::cases() as $status) {
+            $result[$status->value] = $counts->get($status->value, 0);
+        }
+
+        $result['all'] = array_sum($result);
+
+        return $result;
+    }
 }
