@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "./components/btn.css";
 @import "./components/form.css";
+@plugin "@tailwindcss/typography";
 
 @source '../**/*.blade.php';
 @source '../**/*.js';

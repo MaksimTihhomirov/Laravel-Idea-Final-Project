@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use App\IdeaStatus;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 
 class Idea extends Model
 {
@@ -25,6 +27,19 @@ class Idea extends Model
             'status' => IdeaStatus::class,
             'links' => 'array',
         ];
+    }
+
+    protected function formattedDescription(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => Str::markdown(
+                $this->description ?? '',
+                [
+                    'html_input' => 'strip',
+                    'allow_unsafe_links' => false,
+                ]
+            ),
+        );
     }
 
     public function user(): BelongsTo

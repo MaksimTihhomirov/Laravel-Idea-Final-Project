@@ -1,11 +1,11 @@
 <?php
 
 use App\Http\Controllers\IdeaController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegisteredUserController;
 use App\Http\Controllers\SessionsController;
 use App\Http\Controllers\StepController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProfileController;
 
 Route::get('/', [IdeaController::class, 'index'])->name('home');
 
@@ -27,12 +27,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/ideas', [IdeaController::class, 'index'])
         ->name('ideas.index');
 
-        Route::get('/profile/edit', [ProfileController::class, 'edit'])
-    ->name('profile.edit');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])
+        ->name('profile.edit');
 
-Route::patch('/profile/edit', [ProfileController::class, 'update'])
-    ->name('profile.update')
-    ->middleware('throttle:5,1');
+    Route::patch('/profile/edit', [ProfileController::class, 'update'])
+        ->name('profile.update')
+        ->middleware('throttle:5,1');
 
     Route::post('/ideas', [IdeaController::class, 'store'])
         ->name('ideas.store');
@@ -40,10 +40,10 @@ Route::patch('/profile/edit', [ProfileController::class, 'update'])
     Route::get('/ideas/{idea}', [IdeaController::class, 'show'])
         ->name('ideas.show')
         ->can('view', 'idea');
-       
+
     Route::patch('/ideas/{idea}', [IdeaController::class, 'update'])
-    ->name('ideas.update')
-    ->can('update', 'idea');
+        ->name('ideas.update')
+        ->can('update', 'idea');
 
     Route::delete('/ideas/{idea}', [IdeaController::class, 'destroy'])
         ->name('ideas.destroy')

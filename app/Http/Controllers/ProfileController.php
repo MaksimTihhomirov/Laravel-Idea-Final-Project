@@ -53,7 +53,7 @@ class ProfileController extends Controller
 
         if ($oldEmail !== $user->email) {
             Notification::route('mail', $oldEmail)
-                ->notify(new EmailChanged());
+                ->notify(new EmailChanged);
         }
 
         return redirect()->route('profile.edit')

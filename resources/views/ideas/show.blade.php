@@ -57,9 +57,13 @@
 
         </div>
 
-        <x-card class="mt-6">
-            <p class="whitespace-pre-wrap">{{ $idea->description }}</p>
-        </x-card>
+@if($idea->description)
+    <x-card class="mt-6">
+        <div class="prose prose-invert max-w-none">
+            {!! $idea->formatted_description !!}
+        </div>
+    </x-card>
+@endif
 
         @if($idea->steps->isNotEmpty())
 

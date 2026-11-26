@@ -10,7 +10,7 @@ it('updates an existing idea', function () {
 
     $idea = Idea::factory()->for($user)->create();
 
-    visit('/ideas/' . $idea->id)
+    visit('/ideas/'.$idea->id)
         ->click('[data-test="edit-idea-button"]')
         ->fill('title', 'Updated Idea')
         ->fill('description', 'Updated description')

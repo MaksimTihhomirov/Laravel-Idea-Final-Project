@@ -1,16 +1,14 @@
 @props(['idea' => null])
 
-@props(['idea' => null])
-
 <form method="POST"
-      action="{{ $idea ? route('ideas.update', $idea) : route('ideas.store') }}"
-      enctype="multipart/form-data"
-      class="space-y-6">
+    action="{{ $idea ? route('ideas.update', $idea) : route('ideas.store') }}"
+    onsubmit="if (this.elements.image.files.length) this.enctype = 'multipart/form-data'"
+    class="space-y-6">
 
     @csrf
 
-    @if($idea)
-        @method('PATCH')
+    @if ($idea)
+        <input type="hidden" name="_method" value="PATCH">
     @endif
 
     <x-form.field name="title" label="Title">

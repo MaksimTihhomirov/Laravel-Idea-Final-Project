@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Actions\CreateIdea;
 use App\Actions\UpdateIdea;
-use App\IdeaStatus;
 use App\Http\Requests\StoreIdeaRequest;
 use App\Http\Requests\UpdateIdeaRequest;
+use App\IdeaStatus;
 use App\Models\Idea;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
