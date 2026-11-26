@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Step;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class StepController extends Controller
 {
     public function update(Step $step)
     {
-        abort_unless(Auth::user()->is($step->idea->user), 403);
+        Gate::authorize('update', $step->idea);
 
         $step->update([
             'completed' => ! $step->completed,

@@ -30,10 +30,12 @@ Route::middleware('auth')->group(function () {
         ->name('ideas.store');
 
     Route::get('/ideas/{idea}', [IdeaController::class, 'show'])
-        ->name('ideas.show');
+        ->name('ideas.show')
+        ->can('view', 'idea');
 
     Route::delete('/ideas/{idea}', [IdeaController::class, 'destroy'])
-        ->name('ideas.destroy');
+        ->name('ideas.destroy')
+        ->can('delete', 'idea');
 
     Route::patch('/steps/{step}', [StepController::class, 'update'])
         ->name('steps.update');
