@@ -14,9 +14,7 @@
             type="button"
             class="w-full mt-8 h-32 bg-card border border-border rounded-xl text-left px-6 hover:border-primary cursor-pointer"
         >
-            <span class="text-xl text-muted-foreground">
-                What's the idea?
-            </span>
+            What's the idea?
         </button>
 
     </header>
@@ -51,56 +49,15 @@
         @empty
 
             <x-card>
-                <p class="text-muted-foreground">
-                    No ideas at this time.
-                </p>
+                No ideas at this time.
             </x-card>
 
         @endforelse
 
     </div>
 
-    <!-- Modal -->
-
-    <div
-        x-data="{ show: false, name: 'create-idea' }"
-        x-show="show"
-        @open-modal.window="if ($event.detail === name) show = true"
-        @keydown.escape.window="show = false"
-        @click.self="show = false"
-        x-transition
-        style="display: none;"
-        class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
-        role="dialog"
-        aria-modal="true"
-        aria-label="Create new idea"
-    >
-
-        <x-card class="w-full max-w-lg">
-
-            <div class="flex items-center justify-between mb-6">
-
-                <h2 class="text-2xl font-bold">
-                    Create a new idea
-                </h2>
-
-                <button
-                    type="button"
-                    @click="show = false"
-                    class="text-2xl cursor-pointer"
-                    aria-label="Close"
-                >
-                    ×
-                </button>
-
-            </div>
-
-            <p class="text-muted-foreground">
-                Your next great idea starts here.
-            </p>
-
-        </x-card>
-
-    </div>
+    <x-modal name="create-idea" title="New Idea" :show="$errors->any()">
+        <x-idea-form />
+    </x-modal>
 
 </x-layout.layout>

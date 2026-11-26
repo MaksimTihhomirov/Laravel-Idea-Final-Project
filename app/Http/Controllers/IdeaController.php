@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\IdeaStatus;
+use App\Http\Requests\StoreIdeaRequest;
 use App\Models\Idea;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -34,6 +35,14 @@ class IdeaController extends Controller
             'statusCounts' => Idea::statusCounts($user),
             'status' => $status,
         ]);
+    }
+
+    public function store(StoreIdeaRequest $request)
+    {
+        Auth::user()->ideas()->create($request->validated());
+
+        return redirect('/ideas')
+            ->with('success', 'Idea created successfully!');
     }
 
     public function show(Idea $idea)
