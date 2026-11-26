@@ -35,4 +35,23 @@ class IdeaController extends Controller
             'status' => $status,
         ]);
     }
+
+    public function show(Idea $idea)
+    {
+        abort_unless(Auth::user()->is($idea->user), 403);
+
+        return view('ideas.show', [
+            'idea' => $idea,
+        ]);
+    }
+
+    public function destroy(Idea $idea)
+    {
+        abort_unless(Auth::user()->is($idea->user), 403);
+
+        $idea->delete();
+
+        return redirect('/ideas')
+            ->with('success', 'Idea deleted successfully!');
+    }
 }
