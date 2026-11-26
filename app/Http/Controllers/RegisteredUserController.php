@@ -31,6 +31,6 @@ class RegisteredUserController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect('/');
+        return redirect('/')->with('success', 'Account created successfully!');
     }
 }

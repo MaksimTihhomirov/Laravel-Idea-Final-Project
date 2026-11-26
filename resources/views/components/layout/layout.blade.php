@@ -19,5 +19,18 @@
         {{ $slot }}
     </main>
 
+    @session('success')
+        <div
+            x-data="{ show: true }"
+            x-init="setTimeout(() => show = false, 3000)"
+            x-show="show"
+            x-transition
+            role="status"
+            class="fixed bottom-4 right-4 bg-primary text-white px-4 py-3 rounded-lg shadow-lg"
+        >
+            {{ $value }}
+        </div>
+    @endsession
+
 </body>
 </html>
